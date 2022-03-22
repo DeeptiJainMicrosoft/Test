@@ -1,0 +1,36 @@
+name: manage-azure-policy-f0f9c81a
+on:
+  workflow_dispatch:
+    inputs:
+      remarks:
+        description: 'Reason for triggering the workflow run'
+        required: false
+        default: 'Updating Azure Policies'
+
+
+## Uncomment the following if you wish to automatically trigger workflow run with every commit
+#
+#  push:
+#    paths:
+#      - 'policies/Azure_Backup_should_be_enabled_for_Virtual_Machines_013e242c-8828-4970-87b3-ab247555486d/**'
+#      - 'policies/_Preview_Azure_Security_agent_should_be_installed_on_your_Windows_Arc_machines_0367cfc4-90b3-46ba-a8a6-ddd5d3514878/**'
+#      - 'policies/Cognitive_Services_accounts_should_restrict_network_access_037eea7a-bd0a-46c5-9a66-03aea78705d3/**'
+#      - .github/workflows/manage-azure-policy-f0f9c81a.yml
+jobs:
+  apply-azure-policy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS_f0f9c81a}}
+        allow-no-subscriptions: true
+    - name: Create or Update Azure Policies
+      uses: azure/manage-azure-policy@v0
+      with:
+        paths: |
+          policies/Azure_Backup_should_be_enabled_for_Virtual_Machines_013e242c-8828-4970-87b3-ab247555486d/**
+          policies/_Preview_Azure_Security_agent_should_be_installed_on_your_Windows_Arc_machines_0367cfc4-90b3-46ba-a8a6-ddd5d3514878/**
+          policies/Cognitive_Services_accounts_should_restrict_network_access_037eea7a-bd0a-46c5-9a66-03aea78705d3/**
